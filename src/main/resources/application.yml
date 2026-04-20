@@ -1,0 +1,86 @@
+server:
+  port: 8080
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        secure: true
+        same-site: strict
+      timeout: 30m
+      store-type: none
+
+spring:
+  application:
+    name: secure-login-system
+
+  datasource:
+    url: jdbc:h2:mem:securedb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  mail:
+    host: smtp.example.com
+    port: 587
+    username: noreply@example.com
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+app:
+  security:
+    pepper: ${PEPPER_SECRET:default-pepper-change-in-production}
+    argon2:
+      memory: 65536
+      iterations: 3
+      parallelism: 4
+      salt-length: 32
+      hash-length: 32
+    bcrypt:
+      strength: 12
+    session:
+      absolute-timeout: 120m
+      idle-timeout: 30m
+    rate-limit:
+      max-attempts: 5
+      lockout-duration: 15m
+      attempt-window: 5m
+    password-reset:
+      token-expiration: 15m
+    mfa:
+      issuer: SecureLoginApp
+  email:
+    from: noreply@example.com
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+logging:
+  level:
+    com.securelogin: INFO
+    org.springframework.security: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
