@@ -1,4 +1,4 @@
-# Authentication-best-pracitice-
+# Authentication-best-practice
 
 Progetto che espone le best practice per implementare un sistema di autenticazione sicuro basato su token JWT. 
 L’architettura iniziale è stata generata con l’ausilio di agenti LLM.
